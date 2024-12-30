@@ -69,11 +69,7 @@ void print_round_res(int status, player p1, player p2) {
     printf("%s and %s equal\n", p1.name, p2.name);
   }
 }
-/*
-  elements[0] = "Stone";
-  elements[1] = "Cutter";
-  elements[2] = "Paper";
-*/
+
 void who_win_round(player* p1, player* p2) {
   if (p1->curr_elem_ind == 0 && p2->curr_elem_ind == 0) {
     print_round_res(3, *p1, *p2);
