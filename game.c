@@ -1,4 +1,3 @@
-// Online C compiler to run C program online
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,19 +11,32 @@ typedef struct player {
   int curr_elem_ind;
 } player;
 
+void* mem_alloc(int* alloc_cnt, void* obj) {
+  void* res = malloc(strlen(obj) + 1);
+  if (res != NULL) (*alloc_cnt)++;
+  return res;
+}
+
+void mem_free(int* alloc_cnt, void* obj) {
+  if (obj != NULL) (*alloc_cnt)--;
+  free(obj);
+}
+
 int get_random_ind() {
   srand(time(NULL));
   int random_ind = rand() % 3;
   return random_ind;
 }
 
-void init_game(player* p1, player* p2, unsigned int* lvl_count) {
+void init_game(player* p1, player* p2, unsigned int* lvl_count,
+               int* alloc_cnt) {
   printf("How many levels do you want\n");
   scanf("%d", lvl_count);
   printf("What is your name?\n");
   char tmp_name[BUF_MAX];
   scanf("%s", tmp_name);
-  p1->name = malloc(strlen(tmp_name) + 1);
+  // p1->name = malloc(strlen(tmp_name) + 1);
+  p1->name = mem_alloc(alloc_cnt, tmp_name);
   strcpy(p1->name, tmp_name);
   p1->score = 0;
   p1->curr_elem_ind = -1;
@@ -108,15 +120,16 @@ void who_win_game(player p1, player p2) {
 }
 
 int main(void) {
+  int alloc_cnt = 0;
   player p1, p2;
   unsigned int lvl_count;
 
-  init_game(&p1, &p2, &lvl_count);
+  init_game(&p1, &p2, &lvl_count, &alloc_cnt);
   for (unsigned int i = 0; i < lvl_count; i++) {
     next_round(&p1, &p2);
     who_win_round(&p1, &p2);
   }
   who_win_game(p1, p2);
-
+  mem_free(&alloc_cnt, p1.name);
   return 0;
 }
