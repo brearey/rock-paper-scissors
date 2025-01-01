@@ -3,6 +3,8 @@
 #include <string.h>
 #include <time.h>
 
+#include "locale.h"
+
 #define BUF_MAX 4096
 
 typedef struct player {
@@ -30,9 +32,9 @@ int get_random_ind() {
 
 void init_game(player* p1, player* p2, unsigned int* lvl_count,
                int* alloc_cnt) {
-  printf("How many levels do you want\n");
+  printf(how_many_levels);
   scanf("%d", lvl_count);
-  printf("What is your name?\n");
+  printf(your_name);
   char tmp_name[BUF_MAX];
   scanf("%s", tmp_name);
   // p1->name = malloc(strlen(tmp_name) + 1);
@@ -41,30 +43,30 @@ void init_game(player* p1, player* p2, unsigned int* lvl_count,
   p1->score = 0;
   p1->curr_elem_ind = -1;
 
-  p2->name = "Computer";
+  p2->name = computer;
   p2->score = 0;
   p2->curr_elem_ind = -1;
 
-  printf("Game is beginning: %s vs %s\n", p1->name, p2->name);
+  printf(game_begin, p1->name, p2->name);
 }
 
 void next_round(player* p1, player* p2) {
   char* elements[3];
-  elements[0] = "Stone";
-  elements[1] = "Cutter";
-  elements[2] = "Paper";
+  elements[0] = rock;
+  elements[1] = scissors;
+  elements[2] = paper;
 
-  printf("Your voice? Please enter a number\n");
+  printf(your_choice);
   for (int i = 0; i < 3; i++) {
     printf("%d. %s\n", i, elements[i]);
   }
   scanf("%d", &(p1->curr_elem_ind));
   if (p1->curr_elem_ind > 2 || p1->curr_elem_ind < 0) {
-    fprintf(stderr, "Incorrect number");
+    fprintf(stderr, incorrect_number);
     exit(1);
   }
   p2->curr_elem_ind = get_random_ind();
-  printf("%s's choice is %s\n", p2->name, elements[p2->curr_elem_ind]);
+  printf(choice_is, p2->name, elements[p2->curr_elem_ind]);
 }
 
 void print_round_res(int status, player p1, player p2) {
@@ -72,13 +74,13 @@ void print_round_res(int status, player p1, player p2) {
   // 2 - p2 win
   // 3 - equal
   if (status == 1) {
-    printf("%s win\n", p1.name);
+    printf(win, p1.name);
   }
   if (status == 2) {
-    printf("%s win\n", p2.name);
+    printf(win, p2.name);
   }
   if (status == 3) {
-    printf("%s and %s equal\n", p1.name, p2.name);
+    printf(players_identical, p1.name, p2.name);
   }
 }
 
@@ -113,9 +115,9 @@ void who_win_round(player* p1, player* p2) {
 void who_win_game(player p1, player p2) {
   printf("=======================\n");
   if (p1.score > p2.score) {
-    printf("%s win the game with score %d\n", p1.name, p1.score);
+    printf(win_with_score, p1.name, p1.score);
   } else {
-    printf("%s win the game with score %d\n", p2.name, p2.score);
+    printf(win_with_score, p2.name, p2.score);
   }
 }
 
