@@ -3,7 +3,7 @@ SRC=game.c
 CCFLAGS=-Wall -Wextra -Werror -std=c11
 BUILD=./game
 
-all: game
+all: test
 rebuild: clean all
 
 game:
