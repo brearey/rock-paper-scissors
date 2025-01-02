@@ -7,7 +7,7 @@ all: test
 rebuild: clean all
 
 game:
-	$(CC) -DENG $(CCFLAGS) $(SRC) -o $(BUILD)
+	$(CC) -DRU $(CCFLAGS) $(SRC) -o $(BUILD)
 
 game_debug:
 	$(CC) $(CCFLAGS) -g $(SRC) -o $(BUILD)
