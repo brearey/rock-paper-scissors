@@ -7,6 +7,13 @@
 
 #define BUF_MAX 4096
 
+typedef struct game {
+  int error;
+  int end;
+  int round_cnt;
+  int alloc_cnt;
+} game;
+
 typedef struct player {
   char* name;
   int score;
@@ -30,15 +37,18 @@ int get_random_ind() {
   return random_ind;
 }
 
-void init_game(player* p1, player* p2, unsigned int* lvl_count,
-               int* alloc_cnt) {
+void init_game(player* p1, player* p2, game* g) {
+  g->alloc_cnt = 0;
   printf(how_many_levels);
-  scanf("%d", lvl_count);
+  if (scanf("%d", &(g->round_cnt)) != 1) {
+    fprintf(stderr, incorrect_number);
+    g->error = 1;
+    return;
+  }
   printf(your_name);
   char tmp_name[BUF_MAX];
   scanf("%s", tmp_name);
-  // p1->name = malloc(strlen(tmp_name) + 1);
-  p1->name = mem_alloc(alloc_cnt, tmp_name);
+  p1->name = mem_alloc(&(g->alloc_cnt), tmp_name);
   strcpy(p1->name, tmp_name);
   p1->score = 0;
   p1->curr_elem_ind = -1;
@@ -50,7 +60,7 @@ void init_game(player* p1, player* p2, unsigned int* lvl_count,
   printf(game_begin, p1->name, p2->name);
 }
 
-void next_round(player* p1, player* p2) {
+void next_round(player* p1, player* p2, game* g) {
   char* elements[3];
   elements[0] = rock;
   elements[1] = scissors;
@@ -60,19 +70,25 @@ void next_round(player* p1, player* p2) {
   for (int i = 0; i < 3; i++) {
     printf("%d. %s\n", i, elements[i]);
   }
-  scanf("%d", &(p1->curr_elem_ind));
+  if (scanf("%d", &(p1->curr_elem_ind)) != 1) {
+    fprintf(stderr, incorrect_number);
+    g->error = 1;
+    return;
+  }
   if (p1->curr_elem_ind > 2 || p1->curr_elem_ind < 0) {
     fprintf(stderr, incorrect_number);
-    exit(1);
+    g->error = 1;
+    return;
   }
   p2->curr_elem_ind = get_random_ind();
   printf(choice_is, p2->name, elements[p2->curr_elem_ind]);
+  g->round_cnt--;
 }
 
 void print_round_res(int status, player p1, player p2) {
   // 1 - p1 win
   // 2 - p2 win
-  // 3 - equal
+  // 3 - standoff
   if (status == 1) {
     printf(win, p1.name);
   }
@@ -124,16 +140,15 @@ void who_win_game(player p1, player p2) {
 }
 
 int main(void) {
-  int alloc_cnt = 0;
+  game g;
   player p1, p2;
-  unsigned int lvl_count;
 
-  init_game(&p1, &p2, &lvl_count, &alloc_cnt);
-  for (unsigned int i = 0; i < lvl_count; i++) {
-    next_round(&p1, &p2);
+  init_game(&p1, &p2, &g);
+  while (g.error == 0 && g.end == 0 && g.round_cnt != 0) {
+    next_round(&p1, &p2, &g);
     who_win_round(&p1, &p2);
   }
   who_win_game(p1, p2);
-  mem_free(&alloc_cnt, p1.name);
+  mem_free(&(g.alloc_cnt), p1.name);
   return 0;
 }

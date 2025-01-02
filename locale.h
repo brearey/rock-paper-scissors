@@ -27,7 +27,7 @@
 #define scissors "Ножницы"
 #define paper "Бумага"
 #define your_choice "Что выбираете? Выберите номер.\n"
-#define incorrect_number "Неверный номер\n"
+#define incorrect_number "Неверное число\n"
 #define choice_is "%s выбрал %s\n"
 #define win "%s победил\n"
 #define players_identical "%s и %s равны\n"
