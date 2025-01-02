@@ -116,6 +116,8 @@ void who_win_game(player p1, player p2) {
   printf("=======================\n");
   if (p1.score > p2.score) {
     printf(win_with_score, p1.name, p1.score);
+  } else if (p1.score == p2.score) {
+    printf(standoff);
   } else {
     printf(win_with_score, p2.name, p2.score);
   }

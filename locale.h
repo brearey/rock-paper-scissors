@@ -13,6 +13,7 @@
 #define win "%s win\n"
 #define players_identical "%s and %s are identical\n"
 #define win_with_score "%s win the game with score %d\n"
+#define standoff "Standoff\n"
 
 #endif
 
@@ -31,5 +32,6 @@
 #define win "%s победил\n"
 #define players_identical "%s и %s равны\n"
 #define win_with_score "%s победил в игре и его очки = %d\n"
+#define standoff "Ничья\n"
 
 #endif

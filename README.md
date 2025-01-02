@@ -1,11 +1,11 @@
 # rock-paper-scissors
 The game rock-paper-scissors on C
 
-# TODO:
+# TODO: DONE
 
 add international strings as preprocessor _("Hello world")
 
-# TODO:
+# TODO: DONE
 
 если в конце игры одинаковые очки то Ничья
 
